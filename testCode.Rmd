@@ -1,0 +1,77 @@
+---
+title: "정규 표현식 연습하기"
+output: html_notebook
+---
+
+## 작성 배경
+
+R에서도 정규 표현식을 컨트롤 할 수 있으며 R의 정규 표현식 함수를 이용하여 문자열을 추출, 변환, 자르기, 조건 판별등을 테스트 해본다
+본 문서는 아래 이광춘님의 블로그 내용을 기반으로 학습해본 내용이다.
+https://statkclee.github.io/ds-authoring/regex-r.html
+
+
+## 주요 라이브러리
+
+R에서 정규 표현식을 다루기 위해서는 다음과 같은 패키지와 함수를 이용함
+
+1. 라이브러리
+    + stringr
+2. 함수
+    + regexpr()
+    + gregexpr()
+    + stringr::str_locate()
+    + string::str_locate_all()
+    
+
+```{r}
+library(stringr)
+```
+
+## 함수의 사용
+
+* 패턴과 매칭되는지 확인 : grep(..., value = FALSE), grepl(), stringr::str_detect()
+* 패턴과 매칭되는 것을 추출 : grep(..., value = TRUE), stringr::str_extract(), stringr::str_extract_all()
+* 문자열 내부에 패턴을 위치, 즉 매칭된 패턴의 시작점 부여 : regexpr(), gregexpr(), stringr::str_locate(), string::str_locate_all()
+* 매칭된 패턴 바꾸기 : sub(), gsub(), stringr::str_replace(), stringr::str_replace_all()
+* 패턴을 사용해서 문자열 쪼개기 : strsplit(), stringr::str_split()
+
+## 함수 예시
+
+* grep(pattern, x, ignore.case = FALSE, perl = FALSE, value = FALSE, fixed = FALSE, useBytes = FALSE, invert = FALSE)
+* grepl(pattern, x, ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE)
+* sub(pattern, replacement, x, ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE)
+* gsub(pattern, replacement, x, ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE)
+* regexpr(pattern, text, ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE)
+* gregexpr(pattern, text, ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE)
+* regexec(pattern, text, ignore.case = FALSE, perl = FALSE, fixed = FALSE, useBytes = FALSE)
+
+
+## 메타문자
+
+정규 표현식 내부에서 특수한 기능을 수행하는 문자열을 의미한다.
+메타 문자는 다음과 같다.
+
+$ * + . ? [ ] ^ { } | ( ) \
+
+
+## 수량자
+
+수량자는 특정 리스트에서 수량자 앞에 있는 문자열이 얼마나 반복되는지를 조건으로 찾는다
+
+1. * 는 0번 이상 반복되는 문자열 탐색
+2. + 는 1번 이상 반복되는 문자열 탐색
+3. ? 는 1번 이하 반복되는 문자열 탐색
+4. {n} 은 n번 반복되는 문자열 탐색
+5. {n,} 은 n번 이상 반복되는 문자열 탐색
+6. {n,m} 은 n~m 회 반복되는 문자열 탐색
+
+```{r}
+strings <- c("a", "ab", "acb", "accb", "acccb", "accccb")
+grep("ac*b", strings, value = TRUE)
+grep("ac+b", strings, value = TRUE)
+grep("ac?b", strings, value = TRUE)
+grep("ac{2}b", strings, value = TRUE)
+grep("ac{2,}b", strings, value = TRUE)
+grep("ac{2,3}b", strings, value = TRUE)
+```
+
